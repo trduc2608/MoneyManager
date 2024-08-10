@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InputFragment"
+    android:orientation="vertical"
+    android:padding="20dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnExpense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/expense_btn"
+            android:backgroundTint="#FFC0CB"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnIncome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/income_btn"
+            android:backgroundTint="#DFD7D7"
+            android:textColor="#F88398" />
+    </LinearLayout>
+
+    <!-- Date Selector -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btnPreviousDate"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="@string/btnback"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:gravity="right"
+            android:contentDescription="Previous Date" />
+
+        <Button
+            android:id="@+id/btnSelectedDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/_6_8_2024_tue"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:backgroundTint="#DFD7D7"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/btnNextDate"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="@string/btnNext"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:gravity="left"
+            android:contentDescription="Next Date" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/note"
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
+        
+        <EditText
+            android:id="@+id/etNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_value"
+            android:padding="10dp"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tvExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/expense_tv"
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:id="@+id/etAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/_0"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:inputType="numberDecimal"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#FFC0CB"
+        android:textColor="@color/white"
+        android:text="@string/submit_btn"/>
+</LinearLayout>
