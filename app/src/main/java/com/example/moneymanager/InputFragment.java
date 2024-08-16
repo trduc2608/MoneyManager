@@ -30,6 +30,8 @@ public class InputFragment extends Fragment {
     private Calendar calendar;
     private TransactionDb transactionDb;
 
+    private int transactionId = -1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_input, container, false);
@@ -45,6 +47,27 @@ public class InputFragment extends Fragment {
         etAmount = view.findViewById(R.id.etAmount);
 
         transactionDb = new TransactionDb(getContext());
+
+        // Check if we are in edit mode
+        if (getArguments() != null) {
+            transactionId = getArguments().getInt("id", -1);
+            String date = getArguments().getString("date", "");
+            String note = getArguments().getString("note", "");
+            double amount = getArguments().getDouble("amount", 0.0);
+            String type = getArguments().getString("type", "");
+
+            // Set data to the fields
+            btnSelectedDate.setText(date);
+            etNote.setText(note);
+            etAmount.setText(String.format(Locale.getDefault(), "%.2f", amount));
+            if ("Expense".equals(type)) {
+                tvExpense.setText(R.string.expense_tv);
+                btnExpense.performClick();
+            } else {
+                tvExpense.setText(R.string.income_tv);
+                btnIncome.performClick();
+            }
+        }
 
         // Set Listeners
         btnExpense.setOnClickListener(new View.OnClickListener() {
@@ -114,24 +137,41 @@ public class InputFragment extends Fragment {
         String selectedType = tvExpense.getText().toString();
         double amount = 0.0;
 
-        if(!amoutStr.isEmpty()) {
+        if (!TextUtils.isEmpty(amoutStr)) {
             amount = Double.parseDouble(amoutStr);
         }
 
-        Transaction transaction = new Transaction(0, date, note, amount, selectedType);
+        boolean isSuccess;
 
-        boolean isInserted = transactionDb.addTransaction(transaction);
-
-        if(isInserted) {
-            Toast.makeText(getActivity(), "Data inserted successfully!", Toast.LENGTH_SHORT).show();
-
+        if (transactionId == -1) {
+            // New transaction
+            Transaction transaction = new Transaction(0, date, note, amount, selectedType);
+            isSuccess = transactionDb.addTransaction(transaction);
         } else {
-            Toast.makeText(getActivity(), "Data inserted failed!", Toast.LENGTH_SHORT).show();
+            // Update existing transaction
+            Transaction transaction = new Transaction(transactionId, date, note, amount, selectedType);
+            isSuccess = transactionDb.updateTransaction(transaction);
         }
 
-        // Optionally clear the inputs after submission
-        etNote.setText("");
-        etAmount.setText("");
+        if(isSuccess) {
+            Toast.makeText(getActivity(), "Transaction saved successfully!", Toast.LENGTH_SHORT).show();
+            navigateToHomeFragment();
+        } else {
+            Toast.makeText(getActivity(), "Failed to save transaction!", Toast.LENGTH_SHORT).show();
+        }
+
+        // Optionally clear the inputs after submission for new transactions
+        if (transactionId == -1) {
+            etNote.setText("");
+            etAmount.setText("");
+        }
+    }
+
+    private void navigateToHomeFragment() {
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new HomeFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     private void showDatePicker() {
@@ -149,6 +189,8 @@ public class InputFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         btnSelectedDate.setText(sdf.format(calendar.getTime()));
     }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

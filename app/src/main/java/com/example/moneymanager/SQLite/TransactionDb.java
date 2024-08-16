@@ -54,9 +54,31 @@ public class TransactionDb extends SQLiteOpenHelper {
         values.put(COLUMN_AMOUNT, transaction.getAmount());
         values.put(COLUMN_TYPE, transaction.getType());
 
-        long result = db.insert(TABLE_NAME, null, values);
-        return result != 1;
+        long result = -1;
+        try {
+            result = db.insert(TABLE_NAME, null, values);
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle or log the error
+        } finally {
+            db.close(); // Ensure the database is closed after the operation
+        }
+
+        return result != -1;
     }
+
+//    public boolean deleteTransaction(int id) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        int result = -1;
+//
+//        try {
+//            result = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
+//        } catch (Exception e) {
+//            e.printStackTrace(); // Handle or log the error
+//        }
+//
+//        return result > 0; // Return true if at least one row was deleted
+//    }
+
 
     public List<Transaction> getAllTransactions() {
         List<Transaction> transactions = new ArrayList<>();
@@ -75,5 +97,26 @@ public class TransactionDb extends SQLiteOpenHelper {
         }
         cursor.close();
         return transactions;
+    }
+
+    public boolean updateTransaction(Transaction transaction) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_DATE, transaction.getDate());
+        values.put(COLUMN_NOTE, transaction.getNote());
+        values.put(COLUMN_AMOUNT, transaction.getAmount());
+        values.put(COLUMN_TYPE, transaction.getType());
+
+        int result = -1;
+
+        try {
+            result = db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{String.valueOf(transaction.getId())});
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle or log the error
+        } finally {
+            db.close(); // Ensure the database is closed after the operation
+        }
+
+        return result > 0; // Return true if at least one row was updated
     }
 }
